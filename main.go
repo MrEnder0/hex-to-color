@@ -29,24 +29,22 @@ var Colors = map[Color]string{
 }
 
 func main() {
-	var r, g, b int
 	for {
-		fmt.Println("Enter an r value:")
-		fmt.Scan(&r)
-		fmt.Println("Enter a g value:")
-		fmt.Scan(&g)
-		fmt.Println("Enter a b value:")
-		fmt.Scan(&b)
+		var given_hex string
 
-		given_color := Color{r, g, b}
+		fmt.Println("Enter a color in hex format (#RRGGBB):")
+		fmt.Scan(&given_hex)
+
+		var converted_hex = hex_to_rgb(given_hex)
+
 		smallest_distance := ColorDistance{distance: math.MaxInt64}
 
 		for k := range Colors {
-			if given_color == k {
+			if converted_hex == k {
 				fmt.Printf("The color is %s\n", Colors[k])
 				return
 			} else {
-				distance := math.Abs(float64(r-k.red)) + math.Abs(float64(g-k.green)) + math.Abs(float64(b-k.blue))
+				distance := math.Abs(float64(converted_hex.red-k.red)) + math.Abs(float64(converted_hex.green-k.green)) + math.Abs(float64(converted_hex.blue-k.blue))
 
 				if int(distance) < smallest_distance.distance {
 					smallest_distance.distance = int(distance)
@@ -57,4 +55,10 @@ func main() {
 
 		fmt.Printf("The closest color is %s\n", Colors[smallest_distance.color])
 	}
+}
+
+func hex_to_rgb(hex string) Color {
+	var r, g, b int
+	fmt.Sscanf(hex, "#%02x%02x%02x", &r, &g, &b)
+	return Color{r, g, b}
 }
