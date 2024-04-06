@@ -59,6 +59,15 @@ func main() {
 
 func hex_to_rgb(hex string) Color {
 	var r, g, b int
-	fmt.Sscanf(hex, "#%02x%02x%02x", &r, &g, &b)
+
+	switch len(hex) {
+	case 7:
+		fmt.Sscanf(hex, "#%02x%02x%02x", &r, &g, &b)
+	case 6:
+		fmt.Sscanf(hex, "%02x%02x%02x", &r, &g, &b)
+	default:
+		fmt.Println("Invalid hex code")
+	}
+
 	return Color{r, g, b}
 }
